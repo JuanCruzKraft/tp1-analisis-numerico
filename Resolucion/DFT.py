@@ -1,19 +1,25 @@
 import numpy as np
-# funcion que recibe los datos de la señal capturada
-# para calcular la serie de fourier
-def calcular_serie_fourier(vectorX, vectorY):
-    
-    # Calcular los coeficientes de la serie de Fourier de la función
-    N = len(vectorY)
-    y_fft = np.fft.fft(vectorY)
-    a = y_fft/N # amplitud de la serie de fourier
-    f = np.fft.fftfreq(N, d=(vectorX[1] - vectorX[0]))  # Calcular las frecuencias correspondientes
 
-    n = len(f)
-    amplitud = a[:n//2]
-    frecuencias = f[:n//2]
+def calcular_serie_fourier_sinFFT(vectorX, vectorY):
+    # Obtengo la long de la señal
+    N = len(vectorY)
     
-    # calcular el valor absoluto de la amplitud
-    amplitud = 2*np.abs(amplitud)
+    # guardo en vectores los val de ampl y frec
+    amplitud = np.zeros(N//2)
+    frecuencias = np.zeros(N//2)
+    
+    # Itero sobre los primeros N/2 coef de frecuencia
+    for k in range(N//2):
+        suma = 0  # Arranco la suma en 0
+        # Itero sobre todos los puntos de la señal
+        for n in range(N):
+            # Calculo la suma para el coef de frecuencia actual k
+            suma += vectorY[n] * np.exp(-1j * 2 * np.pi * k * vectorX[n] / (vectorX[-1] - vectorX[0]))
+        
+        # Calculo la amplitud del coeficiente de frecuencia actual
+        amplitud[k] = 2 * np.abs(suma) / N
+        
+        # Calculo la frec correspondiente al coeficiente de frecuencia actual
+        frecuencias[k] = k / (vectorX[-1] - vectorX[0])
     
     return amplitud, frecuencias
