@@ -18,6 +18,13 @@ def ventana_gauss():
     ventana = np.exp(-0.5 * (np.arange(-30, 31) / variacion_suavizado)**2)  # Ventana de Gauss de ancho 10
     return ventana
 
+def ventana_gauss_alernative():
+    N = 4000
+    n = np.arange(-(N-1)/2,(N-1)/2)
+    a = 8
+    desviacionSTD = (N-1)/(2*a)
+    y = np.exp(-0.5 * (n/desviacionSTD)**2)
+    return y
 # ------------------------------------------------
 
 def butterworth_filter(data, cutoff_freq, sampling_freq, filter_order=4, filter_type='low'):
